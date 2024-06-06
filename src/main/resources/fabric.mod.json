@@ -1,0 +1,43 @@
+{
+	"schemaVersion": 1,
+	"id": "easymute",
+	"version": "${version}",
+	"name": "EasyMute",
+	"description": "EasyMute adds a keybind for muting and unmuting the game.",
+	"authors": [
+		"bilektugrul",
+		"UsainSrht"
+	],
+	"contact": {
+		"homepage": "https://github.com/bilektugrul/EasyMute",
+		"sources": "https://github.com/bilektugrul/EasyMute"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/easymute/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"io.github.greenmc.easymute.EasyMute"
+		],
+		"client": [
+			"io.github.greenmc.easymute.EasyMuteClient"
+		]
+	},
+	"mixins": [
+		"easymute.mixins.json",
+		{
+			"config": "easymute.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.20.6",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-key-binding-api-v1": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
