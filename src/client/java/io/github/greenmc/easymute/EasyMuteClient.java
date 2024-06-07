@@ -28,7 +28,7 @@ public class EasyMuteClient implements ClientModInitializer {
 				"category.easymute.mod"));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (muteKey.wasPressed()) {
+			if (muteKey.wasPressed()) {
 
 				if (!muted) mute(client, client.options);
 				else unmute(client, client.options);
