@@ -10,6 +10,7 @@ import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class EasyMuteClient implements ClientModInitializer {
@@ -24,8 +25,7 @@ public class EasyMuteClient implements ClientModInitializer {
 		muteKey = KeyBindingHelper.registerKeyBinding(
 				new KeyBinding("key.easymute.mute",
 				InputUtil.Type.KEYSYM,
-				GLFW.GLFW_KEY_M,
-				"category.easymute.mod"));
+				GLFW.GLFW_KEY_M, KeyBinding.Category.create(Identifier.of("category.easymute.mod"))));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (muteKey.wasPressed()) {
