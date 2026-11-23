@@ -24,7 +24,7 @@ public class EasyMuteClient implements ClientModInitializer {
 		this.muted = !EasyMuteConfig.savedVolumes.isEmpty();
 		this.muteKey = KeyMappingHelper.registerKeyMapping(
 				new KeyMapping("key.easymute.mute",
-						InputConstants.Type.KEYBOARD,
+						InputConstants.Type.KEYSYM,
 						InputConstants.KEY_M, KeyMapping.Category.register(Identifier.parse("category.easymute.mod")))
 		);
 
