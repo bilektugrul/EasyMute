@@ -1,5 +1,5 @@
 plugins {
-	id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
+	id 'net.fabricmc.fabric-loom' version '1.19-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -42,8 +42,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-	implementation("com.terraformersmc:modmenu:18.0.0-alpha.8")
-	implementation("dev.isxander:yet-another-config-lib:3.9.3+26.1-fabric")
+	implementation("com.terraformersmc:modmenu:21.0.1")
+	implementation("dev.isxander:yet-another-config-lib:3.9.7+26.3-fabric")
 }
 
 processResources {

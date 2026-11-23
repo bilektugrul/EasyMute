@@ -9,7 +9,6 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -37,8 +36,8 @@ public class EasyMuteClient implements ClientModInitializer {
 		this.muted = mutedCategories.size() == SoundSource.values().length;
 		this.muteKey = KeyMappingHelper.registerKeyMapping(
 				new KeyMapping("key.easymute.mute",
-						InputConstants.Type.KEYSYM,
-						GLFW.GLFW_KEY_M, KeyMapping.Category.register(Identifier.parse("category.easymute.mod")))
+						InputConstants.Type.KEYBOARD,
+						InputConstants.KEY_M, KeyMapping.Category.register(Identifier.parse("category.easymute.mod")))
 		);
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -82,7 +81,7 @@ public class EasyMuteClient implements ClientModInitializer {
 	}
 
 	private void sendToast(Minecraft client, String desc) {
-		client.getToastManager().addToast(new SystemToast(
+		client.gui.toastManager().addToast(new SystemToast(
 				SystemToast.SystemToastId.NARRATOR_TOGGLE,
 				Component.literal("EasyMute"),
 				Component.translatable(desc)));
