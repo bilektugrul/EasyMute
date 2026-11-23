@@ -14,9 +14,13 @@ import java.util.Properties;
 public class EasyMuteConfig {
 
     private static final String SAVED_VOLUME_PREFIX = "savedVolume.";
+    private static final String MUTE_WHEN_MINIMIZED = "muteWhenMinimized";
+    private static final String MINIMIZED_VOLUME = "minimizedVolume";
 
     public static Map<SoundSource, Boolean> categoriesToMute = new EnumMap<>(SoundSource.class);
     public static Map<SoundSource, Double> savedVolumes = new EnumMap<>(SoundSource.class);
+    public static boolean muteWhenMinimized = false;
+    public static Double minimizedVolume;
 
     private static final File CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("easymute.properties").toFile();
 
@@ -36,18 +40,18 @@ public class EasyMuteConfig {
         try (FileInputStream in = new FileInputStream(CONFIG_FILE)) {
             props.load(in);
 
+            muteWhenMinimized = Boolean.parseBoolean(props.getProperty(MUTE_WHEN_MINIMIZED, "false"));
+            minimizedVolume = parseVolume(props.getProperty(MINIMIZED_VOLUME));
+
             for (SoundSource source : SoundSource.values()) {
                 String key = source.name();
                 if (props.containsKey(key)) {
                     categoriesToMute.put(source, Boolean.parseBoolean(props.getProperty(key)));
                 }
 
-                String savedVolume = props.getProperty(SAVED_VOLUME_PREFIX + key);
+                Double savedVolume = parseVolume(props.getProperty(SAVED_VOLUME_PREFIX + key));
                 if (savedVolume != null) {
-                    try {
-                        savedVolumes.put(source, Double.parseDouble(savedVolume));
-                    } catch (NumberFormatException ignored) {
-                    }
+                    savedVolumes.put(source, savedVolume);
                 }
             }
         } catch (IOException e) {
@@ -57,6 +61,10 @@ public class EasyMuteConfig {
 
     public static void save() {
         Properties props = new Properties();
+        props.setProperty(MUTE_WHEN_MINIMIZED, Boolean.toString(muteWhenMinimized));
+        if (minimizedVolume != null) {
+            props.setProperty(MINIMIZED_VOLUME, minimizedVolume.toString());
+        }
 
         for (Map.Entry<SoundSource, Boolean> entry : categoriesToMute.entrySet()) {
             props.setProperty(entry.getKey().name(), entry.getValue().toString());
@@ -70,6 +78,18 @@ public class EasyMuteConfig {
             props.store(out, "EasyMute Configuration");
         } catch (IOException e) {
             EasyMute.LOGGER.error("Failed to save config", e);
+        }
+    }
+
+    private static Double parseVolume(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 

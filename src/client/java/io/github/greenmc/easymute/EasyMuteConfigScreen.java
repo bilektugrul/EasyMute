@@ -31,8 +31,23 @@ public class EasyMuteConfigScreen {
                     .build());
         }
 
+        ConfigCategory generalCategory = ConfigCategory.createBuilder()
+                .name(Component.translatable("text.easymute.general_title"))
+                .option(Option.<Boolean>createBuilder()
+                        .name(Component.translatable("text.easymute.mute_when_minimized"))
+                        .description(OptionDescription.of(Component.translatable("text.easymute.mute_when_minimized_tooltip")))
+                        .binding(
+                                false,
+                                () -> EasyMuteConfig.muteWhenMinimized,
+                                newVal -> EasyMuteConfig.muteWhenMinimized = newVal
+                        )
+                        .controller(TickBoxControllerBuilder::create)
+                        .build())
+                .build();
+
         return YetAnotherConfigLib.createBuilder()
                 .title(Component.translatable("text.easymute.mod_menu_title"))
+                .category(generalCategory)
                 .category(categoryBuilder.build())
                 .save(EasyMuteConfig::save)
                 .build()

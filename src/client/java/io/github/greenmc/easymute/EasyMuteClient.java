@@ -33,7 +33,31 @@ public class EasyMuteClient implements ClientModInitializer {
 				if (!muted) mute(client, client.options);
 				else unmute(client, client.options);
 			}
+
+			updateMinimizedMute(client, client.options);
 		});
+	}
+
+	private void updateMinimizedMute(Minecraft client, Options options) {
+		boolean minimized = client.getWindow().isIconified();
+
+		if (minimized && EasyMuteConfig.muteWhenMinimized && EasyMuteConfig.minimizedVolume == null) {
+			double masterVolume = options.getSoundSourceVolume(SoundSource.MASTER);
+			if (masterVolume == 0.0D) {
+				return;
+			}
+
+			EasyMuteConfig.minimizedVolume = masterVolume;
+			options.getSoundSourceOptionInstance(SoundSource.MASTER).set(0.0D);
+			EasyMuteConfig.save();
+		} else if (!minimized && EasyMuteConfig.minimizedVolume != null) {
+			if (options.getSoundSourceVolume(SoundSource.MASTER) == 0.0D) {
+				options.getSoundSourceOptionInstance(SoundSource.MASTER).set(EasyMuteConfig.minimizedVolume);
+			}
+
+			EasyMuteConfig.minimizedVolume = null;
+			EasyMuteConfig.save();
+		}
 	}
 
 	private void mute(Minecraft client, Options options) {
