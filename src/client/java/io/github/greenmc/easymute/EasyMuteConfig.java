@@ -7,13 +7,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Properties;
 
 public class EasyMuteConfig {
 
-    public static Map<SoundSource, Boolean> categoriesToMute = new HashMap<>();
+    private static final String SAVED_VOLUME_PREFIX = "savedVolume.";
+
+    public static Map<SoundSource, Boolean> categoriesToMute = new EnumMap<>(SoundSource.class);
+    public static Map<SoundSource, Double> savedVolumes = new EnumMap<>(SoundSource.class);
 
     private static final File CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("easymute.properties").toFile();
 
@@ -38,9 +41,17 @@ public class EasyMuteConfig {
                 if (props.containsKey(key)) {
                     categoriesToMute.put(source, Boolean.parseBoolean(props.getProperty(key)));
                 }
+
+                String savedVolume = props.getProperty(SAVED_VOLUME_PREFIX + key);
+                if (savedVolume != null) {
+                    try {
+                        savedVolumes.put(source, Double.parseDouble(savedVolume));
+                    } catch (NumberFormatException ignored) {
+                    }
+                }
             }
         } catch (IOException e) {
-            System.err.println("[EasyMute] Failed to load config: " + e.getMessage());
+            EasyMute.LOGGER.error("Failed to load config", e);
         }
     }
 
@@ -51,10 +62,14 @@ public class EasyMuteConfig {
             props.setProperty(entry.getKey().name(), entry.getValue().toString());
         }
 
+        for (Map.Entry<SoundSource, Double> entry : savedVolumes.entrySet()) {
+            props.setProperty(SAVED_VOLUME_PREFIX + entry.getKey().name(), entry.getValue().toString());
+        }
+
         try (FileOutputStream out = new FileOutputStream(CONFIG_FILE)) {
             props.store(out, "EasyMute Configuration");
         } catch (IOException e) {
-            System.err.println("[EasyMute] Failed to save config: " + e.getMessage());
+            EasyMute.LOGGER.error("Failed to save config", e);
         }
     }
 

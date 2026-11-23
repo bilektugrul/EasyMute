@@ -41,6 +41,7 @@
 		"fabric-key-mapping-api-v1": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"modmenu": "*",
+		"yet_another_config_lib_v3": "*"
 	}
 }

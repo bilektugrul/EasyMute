@@ -5,7 +5,6 @@
   "text.easymute.mod_menu_title": "EasyMute Settings",
   "text.easymute.category_title": "Target Categories",
   "text.easymute.category_tooltip": "Select which sound categories EasyMute will affect.",
-  "text.easymute.setting_name": "%s Volume",
   "text.easymute.setting_tooltip": "Mute %s when hotkey is pressed.",
 
   "key.category.minecraft.category.easymute.mod": "EasyMute",
