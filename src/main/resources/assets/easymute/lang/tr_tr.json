@@ -1,6 +1,13 @@
 {
   "text.easymute.muted": "Oyun susturuldu",
   "text.easymute.unmuted": "Oyunun sesi açıldı",
-  "category.easymute.mod": "EasyMute",
+
+  "text.easymute.mod_menu_title": "EasyMute Ayarları",
+  "text.easymute.category_title": "Hedef Kategoriler",
+  "text.easymute.category_tooltip": "Susturma tuşuna basıldığında hangi ses kategorilerinin sesinin kısılacağını seç.",
+  "text.easymute.setting_name": "%s Sesleri",
+  "text.easymute.setting_tooltip": "Susturma tuşuna basıldığında %s kategorisini sustur.",
+
+  "key.category.minecraft.category.easymute.mod": "EasyMute",
   "key.easymute.mute": "Susturma Tuşu"
 }

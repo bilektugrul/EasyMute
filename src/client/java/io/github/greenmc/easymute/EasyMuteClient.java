@@ -11,19 +11,35 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 public class EasyMuteClient implements ClientModInitializer {
 
-	private static KeyMapping muteKey;
+	private final Map<SoundSource, Double> savedVolumes = new EnumMap<>(SoundSource.class);
 
-	private float savedVolume = 0.5F;
+	private KeyMapping muteKey;
 	private boolean muted;
 
 	@Override
 	public void onInitializeClient() {
-		muteKey = KeyMappingHelper.registerKeyMapping(
+		EasyMuteConfig.load();
+
+		EnumSet<SoundSource> mutedCategories = EnumSet.noneOf(SoundSource.class);
+		for (SoundSource source : SoundSource.values()) {
+			if (Minecraft.getInstance().options.getSoundSourceVolume(source) == 0.0F) {
+				mutedCategories.add(source);
+			}
+		}
+
+		this.muted = mutedCategories.size() == SoundSource.values().length;
+		this.muteKey = KeyMappingHelper.registerKeyMapping(
 				new KeyMapping("key.easymute.mute",
-				InputConstants.Type.KEYSYM,
-				GLFW.GLFW_KEY_M, KeyMapping.Category.register(Identifier.parse("category.easymute.mod"))));
+						InputConstants.Type.KEYSYM,
+						GLFW.GLFW_KEY_M, KeyMapping.Category.register(Identifier.parse("category.easymute.mod")))
+		);
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (muteKey.isDown()) {
@@ -36,23 +52,32 @@ public class EasyMuteClient implements ClientModInitializer {
 	}
 
 	private void mute(Minecraft client, Options options) {
-		float currentVolume = options.getSoundSourceVolume(SoundSource.MASTER);
-		if (currentVolume == 0.0F) {
-			unmute(client, options);
-			return;
+		this.savedVolumes.clear();
+
+		for (SoundSource source : SoundSource.values()) {
+			if (EasyMuteConfig.categoriesToMute.getOrDefault(source, false)) {
+				double currentVolume = options.getSoundSourceVolume(source);
+				if (currentVolume == 0.0F) {
+					continue;
+				}
+
+				this.savedVolumes.put(source, currentVolume);
+				options.getSoundSourceOptionInstance(source).set(0.0D);
+			}
 		}
 
-		this.savedVolume = currentVolume;
-		this.muted = true;
 		this.sendToast(client, "text.easymute.muted");
-
-		options.getSoundSourceOptionInstance(SoundSource.MASTER).set(0D);
 	}
 
 	private void unmute(Minecraft client, Options options) {
-		options.getSoundSourceOptionInstance(SoundSource.MASTER).set((savedVolume == 0.0D ? 0.5D : savedVolume));
-
 		this.muted = false;
+
+		for (SoundSource category : SoundSource.values()) {
+			double volumeToRestore = savedVolumes.getOrDefault(category, 0.5D);
+			options.getSoundSourceOptionInstance(category).set(volumeToRestore);
+		}
+
+		this.savedVolumes.clear();
 		this.sendToast(client, "text.easymute.unmuted");
 	}
 

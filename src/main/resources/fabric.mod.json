@@ -21,6 +21,9 @@
 		],
 		"client": [
 			"io.github.greenmc.easymute.EasyMuteClient"
+		],
+		"modmenu": [
+			"io.github.greenmc.easymute.EasyMuteSettingsMenu"
 		]
 	},
 	"mixins": [
