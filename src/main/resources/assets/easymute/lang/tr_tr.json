@@ -6,6 +6,8 @@
   "text.easymute.general_title": "Genel",
   "text.easymute.mute_in_background": "Arka Plandayken Sustur",
   "text.easymute.mute_in_background_tooltip": "Oyun penceresi küçültüldüğünde veya arka plana alındığında oyunu sustur, oyuna geri dönünce sesi geri getir.",
+  "text.easymute.background_uses_categories": "Arka Planda Hedef Kategorileri Kullan",
+  "text.easymute.background_uses_categories_tooltip": "Açıksa arka planda sadece hedef kategoriler susturulur. Kapalıysa oyunun tüm sesi kapanır.",
   "text.easymute.category_title": "Hedef Kategoriler",
   "text.easymute.category_tooltip": "Susturma tuşuna basıldığında hangi ses kategorilerinin sesinin kısılacağını seç.",
   "text.easymute.setting_tooltip": "Susturma tuşuna basıldığında %s susturulsun.",

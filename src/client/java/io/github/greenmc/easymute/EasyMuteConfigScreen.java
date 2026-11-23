@@ -43,6 +43,16 @@ public class EasyMuteConfigScreen {
                         )
                         .controller(TickBoxControllerBuilder::create)
                         .build())
+                .option(Option.<Boolean>createBuilder()
+                        .name(Component.translatable("text.easymute.background_uses_categories"))
+                        .description(OptionDescription.of(Component.translatable("text.easymute.background_uses_categories_tooltip")))
+                        .binding(
+                                false,
+                                () -> EasyMuteConfig.backgroundUsesCategories,
+                                newVal -> EasyMuteConfig.backgroundUsesCategories = newVal
+                        )
+                        .controller(TickBoxControllerBuilder::create)
+                        .build())
                 .build();
 
         return YetAnotherConfigLib.createBuilder()

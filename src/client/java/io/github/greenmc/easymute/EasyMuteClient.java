@@ -40,22 +40,32 @@ public class EasyMuteClient implements ClientModInitializer {
 
 	private void updateBackgroundMute(Minecraft client, Options options) {
 		boolean inBackground = !client.getWindow().isFocused() || client.getWindow().isIconified();
+		boolean backgroundMuted = !EasyMuteConfig.backgroundVolumes.isEmpty();
 
-		if (inBackground && EasyMuteConfig.muteInBackground && EasyMuteConfig.backgroundVolume == null) {
-			double masterVolume = options.getSoundSourceVolume(SoundSource.MASTER);
-			if (masterVolume == 0.0D) {
-				return;
+		if (inBackground && EasyMuteConfig.muteInBackground && !backgroundMuted) {
+			for (SoundSource source : SoundSource.values()) {
+				boolean shouldMute = EasyMuteConfig.backgroundUsesCategories
+						? EasyMuteConfig.categoriesToMute.getOrDefault(source, false)
+						: source == SoundSource.MASTER;
+				double currentVolume = options.getSoundSourceVolume(source);
+
+				if (shouldMute && currentVolume != 0.0D) {
+					EasyMuteConfig.backgroundVolumes.put(source, currentVolume);
+					options.getSoundSourceOptionInstance(source).set(0.0D);
+				}
 			}
 
-			EasyMuteConfig.backgroundVolume = masterVolume;
-			options.getSoundSourceOptionInstance(SoundSource.MASTER).set(0.0D);
-			EasyMuteConfig.save();
-		} else if (!inBackground && EasyMuteConfig.backgroundVolume != null) {
-			if (options.getSoundSourceVolume(SoundSource.MASTER) == 0.0D) {
-				options.getSoundSourceOptionInstance(SoundSource.MASTER).set(EasyMuteConfig.backgroundVolume);
+			if (!EasyMuteConfig.backgroundVolumes.isEmpty()) {
+				EasyMuteConfig.save();
+			}
+		} else if (!inBackground && backgroundMuted) {
+			for (Map.Entry<SoundSource, Double> entry : EasyMuteConfig.backgroundVolumes.entrySet()) {
+				if (options.getSoundSourceVolume(entry.getKey()) == 0.0D) {
+					options.getSoundSourceOptionInstance(entry.getKey()).set(entry.getValue());
+				}
 			}
 
-			EasyMuteConfig.backgroundVolume = null;
+			EasyMuteConfig.backgroundVolumes.clear();
 			EasyMuteConfig.save();
 		}
 	}
