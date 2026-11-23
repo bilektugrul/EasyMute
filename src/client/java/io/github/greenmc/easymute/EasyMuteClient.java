@@ -34,28 +34,28 @@ public class EasyMuteClient implements ClientModInitializer {
 				else unmute(client, client.options);
 			}
 
-			updateMinimizedMute(client, client.options);
+			updateBackgroundMute(client, client.options);
 		});
 	}
 
-	private void updateMinimizedMute(Minecraft client, Options options) {
-		boolean minimized = client.getWindow().isIconified();
+	private void updateBackgroundMute(Minecraft client, Options options) {
+		boolean inBackground = !client.getWindow().isFocused() || client.getWindow().isIconified();
 
-		if (minimized && EasyMuteConfig.muteWhenMinimized && EasyMuteConfig.minimizedVolume == null) {
+		if (inBackground && EasyMuteConfig.muteInBackground && EasyMuteConfig.backgroundVolume == null) {
 			double masterVolume = options.getSoundSourceVolume(SoundSource.MASTER);
 			if (masterVolume == 0.0D) {
 				return;
 			}
 
-			EasyMuteConfig.minimizedVolume = masterVolume;
+			EasyMuteConfig.backgroundVolume = masterVolume;
 			options.getSoundSourceOptionInstance(SoundSource.MASTER).set(0.0D);
 			EasyMuteConfig.save();
-		} else if (!minimized && EasyMuteConfig.minimizedVolume != null) {
+		} else if (!inBackground && EasyMuteConfig.backgroundVolume != null) {
 			if (options.getSoundSourceVolume(SoundSource.MASTER) == 0.0D) {
-				options.getSoundSourceOptionInstance(SoundSource.MASTER).set(EasyMuteConfig.minimizedVolume);
+				options.getSoundSourceOptionInstance(SoundSource.MASTER).set(EasyMuteConfig.backgroundVolume);
 			}
 
-			EasyMuteConfig.minimizedVolume = null;
+			EasyMuteConfig.backgroundVolume = null;
 			EasyMuteConfig.save();
 		}
 	}

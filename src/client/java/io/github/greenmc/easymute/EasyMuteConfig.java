@@ -14,13 +14,13 @@ import java.util.Properties;
 public class EasyMuteConfig {
 
     private static final String SAVED_VOLUME_PREFIX = "savedVolume.";
-    private static final String MUTE_WHEN_MINIMIZED = "muteWhenMinimized";
-    private static final String MINIMIZED_VOLUME = "minimizedVolume";
+    private static final String MUTE_IN_BACKGROUND = "muteInBackground";
+    private static final String BACKGROUND_VOLUME = "backgroundVolume";
 
     public static Map<SoundSource, Boolean> categoriesToMute = new EnumMap<>(SoundSource.class);
     public static Map<SoundSource, Double> savedVolumes = new EnumMap<>(SoundSource.class);
-    public static boolean muteWhenMinimized = false;
-    public static Double minimizedVolume;
+    public static boolean muteInBackground = false;
+    public static Double backgroundVolume;
 
     private static final File CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("easymute.properties").toFile();
 
@@ -40,8 +40,8 @@ public class EasyMuteConfig {
         try (FileInputStream in = new FileInputStream(CONFIG_FILE)) {
             props.load(in);
 
-            muteWhenMinimized = Boolean.parseBoolean(props.getProperty(MUTE_WHEN_MINIMIZED, "false"));
-            minimizedVolume = parseVolume(props.getProperty(MINIMIZED_VOLUME));
+            muteInBackground = Boolean.parseBoolean(props.getProperty(MUTE_IN_BACKGROUND, "false"));
+            backgroundVolume = parseVolume(props.getProperty(BACKGROUND_VOLUME));
 
             for (SoundSource source : SoundSource.values()) {
                 String key = source.name();
@@ -61,9 +61,9 @@ public class EasyMuteConfig {
 
     public static void save() {
         Properties props = new Properties();
-        props.setProperty(MUTE_WHEN_MINIMIZED, Boolean.toString(muteWhenMinimized));
-        if (minimizedVolume != null) {
-            props.setProperty(MINIMIZED_VOLUME, minimizedVolume.toString());
+        props.setProperty(MUTE_IN_BACKGROUND, Boolean.toString(muteInBackground));
+        if (backgroundVolume != null) {
+            props.setProperty(BACKGROUND_VOLUME, backgroundVolume.toString());
         }
 
         for (Map.Entry<SoundSource, Boolean> entry : categoriesToMute.entrySet()) {

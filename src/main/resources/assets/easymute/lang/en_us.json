@@ -4,8 +4,8 @@
 
   "text.easymute.mod_menu_title": "EasyMute Settings",
   "text.easymute.general_title": "General",
-  "text.easymute.mute_when_minimized": "Mute When Minimized",
-  "text.easymute.mute_when_minimized_tooltip": "Mute the game while its window is minimized and restore the volume when it is opened again.",
+  "text.easymute.mute_in_background": "Mute In Background",
+  "text.easymute.mute_in_background_tooltip": "Mute the game while its window is minimized or not focused and restore the volume when you return to it.",
   "text.easymute.category_title": "Target Categories",
   "text.easymute.category_tooltip": "Select which sound categories EasyMute will affect.",
   "text.easymute.setting_tooltip": "Mute %s when hotkey is pressed.",

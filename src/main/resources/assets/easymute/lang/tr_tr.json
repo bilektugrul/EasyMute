@@ -4,8 +4,8 @@
 
   "text.easymute.mod_menu_title": "EasyMute Ayarları",
   "text.easymute.general_title": "Genel",
-  "text.easymute.mute_when_minimized": "Simge Durumundayken Sustur",
-  "text.easymute.mute_when_minimized_tooltip": "Oyun penceresi simge durumuna küçültüldüğünde oyunu sustur, pencere tekrar açıldığında sesi geri getir.",
+  "text.easymute.mute_in_background": "Arka Plandayken Sustur",
+  "text.easymute.mute_in_background_tooltip": "Oyun penceresi küçültüldüğünde veya arka plana alındığında oyunu sustur, oyuna geri dönünce sesi geri getir.",
   "text.easymute.category_title": "Hedef Kategoriler",
   "text.easymute.category_tooltip": "Susturma tuşuna basıldığında hangi ses kategorilerinin sesinin kısılacağını seç.",
   "text.easymute.setting_tooltip": "Susturma tuşuna basıldığında %s susturulsun.",
